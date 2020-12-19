@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Functional.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Lab4</a> &gt; <a href="index.source.html" class="el_package">Lab</a> &gt; <span class="el_source">Functional.java</span></div><h1>Functional.java</h1><pre class="source lang-java linenums">package Lab;
+
+import java.awt.desktop.OpenFilesEvent;
+import java.io.*;
+import java.util.ArrayList;
+
+public class Functional {
+
+    private String file_name;
+    private String result_file_name;
+    private char symb;
+<span class="fc" id="L12">    public int thread = 0;</span>
+    private String result_symbol;
+    public ArrayList&lt;String&gt; result_strs;
+
+<span class="fc" id="L16">    public Functional(String file_name, String result_file_name, char symb, String result_symbol) {</span>
+<span class="fc" id="L17">        this.file_name = file_name;</span>
+<span class="fc" id="L18">        this.result_file_name = result_file_name;</span>
+<span class="fc" id="L19">        this.symb = symb;</span>
+<span class="fc" id="L20">        this.result_symbol = result_symbol;</span>
+<span class="fc" id="L21">    }</span>
+//
+//    public void setFile_name(String file_name) {
+//        this.file_name = file_name;
+//    }
+//
+//    public void setResult_file_name(String result_file_name) {
+//        this.result_file_name = result_file_name;
+//    }
+//
+//    public void setResult_symbol(String result_symbol) {
+//        this.result_symbol = result_symbol;
+//    }
+//
+//    public void setSymb(char symb) {
+//        this.symb = symb;
+//    }
+//
+//    public String getResult_file_name() {
+//        return result_file_name;
+//    }
+    public ArrayList&lt;String&gt; OpenAndReadFile(){
+<span class="fc" id="L43">        ArrayList&lt;String&gt; file_lines = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L44">        File file = new File(file_name);</span>
+        try {
+<span class="fc" id="L46">            BufferedReader filereader = new BufferedReader(new FileReader(file));</span>
+<span class="fc" id="L47">            String line = filereader.readLine();</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">            while(line!=null){</span>
+<span class="fc" id="L49">                file_lines.add(line);</span>
+<span class="fc" id="L50">                line = filereader.readLine();</span>
+            }
+<span class="fc" id="L52">            filereader.close();</span>
+        }
+<span class="nc" id="L54">        catch (IOException exception){</span>
+<span class="nc" id="L55">            exception.printStackTrace();</span>
+<span class="fc" id="L56">        }</span>
+<span class="fc" id="L57">        return file_lines;</span>
+    }
+    public String Schitalka (String file_line) {
+<span class="fc" id="L60">    int count = 0;</span>
+<span class="fc" id="L61">    int firs_index = 0;</span>
+<span class="fc" id="L62">    int last_index = 0;</span>
+<span class="fc" id="L63">    int temp = 0;</span>
+<span class="fc" id="L64">    boolean quotes = false;</span>
+<span class="fc" id="L65">    boolean coment = false;</span>
+<span class="fc" id="L66">    String temporary_string = &quot;&quot;;</span>
+<span class="fc" id="L67">    String result_result = &quot;&quot;;</span>
+
+<span class="fc" id="L69">    ArrayList&lt;Integer&gt; result = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L71">    char[] line_char = file_line.toCharArray();</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">    for (int i = 0; i &lt; line_char.length; i++) {</span>
+<span class="fc bfc" id="L73" title="All 4 branches covered.">        if (('\&quot;' == line_char[i]) &amp;&amp; (count == 0)) {</span>
+<span class="fc" id="L74">            firs_index = i;</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">            for (int j = i + 1; j &lt; (line_char.length); j++) {</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">                if ('\&quot;' == line_char[j]) {</span>
+<span class="fc" id="L77">                    last_index = j;</span>
+<span class="fc" id="L78">                    temp = temp + ((last_index - firs_index) - 1);</span>
+<span class="fc" id="L79">                    quotes = true;</span>
+<span class="fc" id="L80">                    count = 0;</span>
+<span class="fc" id="L81">                    last_index = 0;</span>
+<span class="fc" id="L82">                    firs_index = 0;</span>
+<span class="fc" id="L83">                    i = j;</span>
+<span class="fc" id="L84">                    break;</span>
+                }
+            }
+<span class="fc bfc" id="L87" title="All 2 branches covered.">            if (!quotes) {</span>
+<span class="fc" id="L88">                count++;</span>
+            }
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        } else if (line_char[i] != symb) {</span>
+<span class="fc" id="L91">            count++;</span>
+        } else {
+<span class="fc" id="L93">            result.add(count + temp);</span>
+<span class="fc" id="L94">            temp = 0;</span>
+<span class="fc" id="L95">            count = 0;</span>
+        }
+<span class="fc" id="L97">        quotes = false;</span>
+    }
+<span class="fc" id="L99">    result.add(count + temp);</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">    for (int i = 0; i &lt; result.size(); i++) {</span>
+<span class="fc" id="L101">        result_result = result_result + Integer.toString(result.get(i));</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (i == (result.size() - 1)) {</span>
+<span class="fc" id="L103">            result_result = result_result + &quot;\n&quot;;</span>
+        } else {
+<span class="fc" id="L105">            result_result = result_result + result_symbol;</span>
+        }
+    }
+
+<span class="fc" id="L109">    return result_result;</span>
+}
+
+    public void WriteAndCloseFile(ArrayList&lt;String&gt; result_result) {
+<span class="fc" id="L113">        try (FileWriter filewriter = new FileWriter(result_file_name, true)){</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">            for (int i = 0; i &lt; result_result.size(); i++) {</span>
+<span class="fc" id="L115">                filewriter.write(result_result.get(i));</span>
+                //filewriter.append('\n');
+            }
+<span class="fc" id="L118">            filewriter.flush();</span>
+        }
+<span class="nc" id="L120">        catch(IOException exception){</span>
+<span class="nc" id="L121">            System.out.println(exception.getMessage());</span>
+<span class="fc" id="L122">        }</span>
+<span class="fc" id="L123">    }</span>
+
+    public void Schitalka_by_threads(int max_threads) throws InterruptedException {
+<span class="fc" id="L126">        ArrayList&lt;String&gt; file_lines = OpenAndReadFile();</span>
+<span class="fc" id="L127">        this.result_strs = file_lines;</span>
+<span class="fc" id="L128">        int counter = 0;</span>
+
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        while (counter&lt;file_lines.size()) {</span>
+<span class="fc" id="L131">            System.out.println(this.thread);</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">            if (thread&lt;max_threads) {</span>
+<span class="fc" id="L133">                Potok potok = new Potok(file_lines.get(counter), counter, this);</span>
+<span class="fc" id="L134">                Thread bee = new Thread(potok);</span>
+<span class="fc" id="L135">                bee.start();</span>
+<span class="fc" id="L136">                counter++;</span>
+<span class="fc" id="L137">                this.thread++;</span>
+<span class="fc" id="L138">            }</span>
+        }
+<span class="fc" id="L140">        Thread.sleep(10);</span>
+
+<span class="fc" id="L142">        WriteAndCloseFile(this.result_strs);</span>
+<span class="fc" id="L143">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
